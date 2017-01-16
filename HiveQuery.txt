@@ -1,0 +1,26 @@
+hive> use custom;
+
+hive> set hive.cli.print.current.db=true;
+hive (custom)> CREATE EXTERNAL TABLE TEMP_DATA (temperature_date string,zipcode int, temperature int) ROW FORMAT DELIMITED FIELDS TERMINATED BY ',' LINES TERMINATED BY '\n';
+
+hive (custom)> DESCRIBE TEMP_DATA;
+OK
+temp_date           	string              	                    
+zipcode             	int                 	                    
+temperature         	int                 	                    
+Time taken: 0.247 seconds, Fetched: 3 row(s)
+
+hive (custom)> LOAD DATA INPATH '/user/hive/Dataset14_1.txt' INTO TABLE TEMP_DATA;
+
+hive (custom)> CREATE TABLE TEMPERATURE_DATA (temp_date date,zipcode int, temperature int) ROW FORMAT DELIMITED FIELDS TERMINATED BY ',' LINES TERMINATED BY '\n';
+
+hive (custom)> INSERT INTO TABLE TEMPERATURE_DATA SELECT from_unixtime(unix_timestamp('24-10-1990','dd-MM-yyyy'),'MM-dd-yyyy'), zipcode,temperature FROM TEMP_DATA;
+
+hive (custom)> DESCRIBE TEMPERATURE_DATA;
+OK
+temp_date           	date                	                    
+zipcode             	int                 	                    
+temperature         	int                 	                    
+Time taken: 0.184 seconds, Fetched: 3 row(s)
+
+
